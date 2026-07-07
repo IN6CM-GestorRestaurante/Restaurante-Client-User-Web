@@ -27,3 +27,11 @@ export const resetPasswordRequest = async (payload) => {
 export const getProfileRequest = async () => {
   return await axiosAuth.get('/auth/profile');
 };
+
+export const changePasswordRequest = async (currentPassword, newPassword) => {
+  return await axiosAuth.put('/auth/change-password', { currentPassword, newPassword });
+};
+
+export const deleteAccountRequest = async (password) => {
+  return await axiosAuth.delete('/auth/account', { data: { password } });
+};

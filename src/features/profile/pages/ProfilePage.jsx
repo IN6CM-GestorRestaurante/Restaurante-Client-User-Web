@@ -4,6 +4,7 @@ import { useAuthStore } from '../../auth/store/authStore.js';
 import { AvatarUploader } from '../components/AvatarUploader.jsx';
 import { ProfileEditForm } from '../components/ProfileEditForm.jsx';
 import { AddressManager } from '../components/AddressManager.jsx';
+import { SecuritySettings } from '../components/SecuritySettings.jsx';
 
 export const ProfilePage = () => {
   const { user } = useAuthStore();
@@ -40,6 +41,9 @@ export const ProfilePage = () => {
 
       {/* Componente 3: Gestión de Direcciones */}
       <AddressManager />
+
+      {/* Componente 4: Seguridad (cambio de contraseña, eliminar cuenta) */}
+      <SecuritySettings />
     </div>
   );
 };
