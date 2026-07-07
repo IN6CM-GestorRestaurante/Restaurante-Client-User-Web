@@ -84,3 +84,24 @@ export const createOrderRequest = async (data) => {
 export const cancelOrderRequest = async (id) => {
   return await axiosUser.put(`/orders/${id}/cancel`);
 };
+
+// 6. Reseñas y calificaciones
+export const getReviewsByBranchRequest = async (branchId, params) => {
+  return await axiosUser.get(`/reviews/branch/${branchId}`, { params });
+};
+
+export const getMyReviewsRequest = async () => {
+  return await axiosUser.get('/reviews/me');
+};
+
+export const createReviewRequest = async (data) => {
+  return await axiosUser.post('/reviews', data);
+};
+
+export const updateReviewRequest = async (id, data) => {
+  return await axiosUser.put(`/reviews/${id}`, data);
+};
+
+export const deleteReviewRequest = async (id) => {
+  return await axiosUser.delete(`/reviews/${id}`);
+};

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Plus, Sparkles, Clock, Flame } from 'lucide-react';
-import { formatCurrency, resolveImageUrl } from '../../../shared/utils/formatters.js';
+import { Plus, Sparkles, Clock, Flame, Tag } from 'lucide-react';
+import { formatCurrency, resolveImageUrl, getActivePromotion } from '../../../shared/utils/formatters.js';
 
 export const MenuCard = ({ item, onOpenDetail }) => {
   const name = item.name || item.nombre || 'Platillo Gourmet';
@@ -10,6 +10,7 @@ export const MenuCard = ({ item, onOpenDetail }) => {
   const isAvailable = item.isAvailable !== false && item.disponible !== false;
   const isSpecial = item.isSpecial || item.especial || false;
   const preparationTime = item.preparationTime || item.tiempo || '15-20 min';
+  const promotion = getActivePromotion(item);
 
   return (
     <div
@@ -38,6 +39,11 @@ export const MenuCard = ({ item, onOpenDetail }) => {
               <Sparkles className="w-3 h-3" /> Especial del Chef
             </span>
           )}
+          {promotion && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-500 text-white font-bold text-[11px] shadow-md">
+              <Tag className="w-3 h-3" /> {promotion.label}
+            </span>
+          )}
           {!isAvailable && (
             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-red-600 text-white font-bold text-[11px] shadow-md">
               Agotado por hoy
@@ -46,8 +52,15 @@ export const MenuCard = ({ item, onOpenDetail }) => {
         </div>
 
         {/* Precio en Esquina Inferior Derecha de la imagen */}
-        <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-slate-900/80 backdrop-blur-md text-white font-extrabold text-sm shadow-md">
-          {formatCurrency(price)}
+        <div className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 backdrop-blur-md text-white shadow-md">
+          {promotion ? (
+            <>
+              <span className="text-[11px] line-through text-slate-400">{formatCurrency(promotion.originalPrice)}</span>
+              <span className="font-extrabold text-sm text-emerald-400">{formatCurrency(promotion.discountedPrice)}</span>
+            </>
+          ) : (
+            <span className="font-extrabold text-sm">{formatCurrency(price)}</span>
+          )}
         </div>
       </div>
 

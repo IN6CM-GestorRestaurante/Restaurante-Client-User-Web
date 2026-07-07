@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, LogOut, Calendar, Clock, ChevronDown, Shield } from 'lucide-react';
+import { User, LogOut, Calendar, Clock, ChevronDown, Shield, MessageSquareText } from 'lucide-react';
 import { useAuthStore } from '../../../features/auth/store/authStore.js';
 import { resolveImageUrl } from '../../utils/formatters.js';
 
@@ -94,6 +94,15 @@ export const UserMenuDropdown = ({ user }) => {
             >
               <Clock className="w-4 h-4 text-blue-600" />
               Historial de Pedidos
+            </Link>
+
+            <Link
+              to="/reviews"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-amber-600 transition-colors"
+            >
+              <MessageSquareText className="w-4 h-4 text-amber-600" />
+              Reseñas
             </Link>
           </div>
 

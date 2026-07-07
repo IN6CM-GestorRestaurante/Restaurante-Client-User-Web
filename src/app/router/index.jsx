@@ -30,6 +30,9 @@ import { NewReservationPage } from '../../features/reservations/pages/NewReserva
 // Perfil
 import { ProfilePage } from '../../features/profile/pages/ProfilePage.jsx';
 
+// Reseñas
+import { ReviewsPage } from '../../features/reviews/pages/ReviewsPage.jsx';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -118,6 +121,10 @@ export const router = createBrowserRouter([
             <ProfilePage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: '/reviews',
+        element: <ReviewsPage />,
       },
     ],
   },
