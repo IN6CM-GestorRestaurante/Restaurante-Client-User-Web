@@ -3,14 +3,12 @@ import { Modal } from '../../../shared/components/ui/Modal.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { Input } from '../../../shared/components/ui/Input.jsx';
 import { useBranchStore } from '../../branches/store/branchStore.js';
-import { useAuthStore } from '../../auth/store/authStore.js';
 import { createReservationRequest } from '../../../shared/api/user.service.js';
 import { Calendar, Clock, Users, MapPin, Sparkles, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ReservationForm = ({ isOpen, onClose, selection, onSuccess }) => {
   const { selectedBranch } = useBranchStore();
-  const { user } = useAuthStore();
   const [notes, setNotes] = useState('');
   const [specialOccasion, setSpecialOccasion] = useState('NINGUNA'); // CUMPLEAÑOS, ANIVERSARIO, NEGOCIOS
   const [loading, setLoading] = useState(false);
@@ -25,20 +23,22 @@ export const ReservationForm = ({ isOpen, onClose, selection, onSuccess }) => {
     setLoading(true);
     try {
       const branchId = selectedBranch?._id || selectedBranch?.id || '60c72b2f9b1d8b001f8e4c3a';
-      const userId = user?.mongoId || user?._id || user?.id || '60c72b2f9b1d8b001f8e4c3a';
+
+      const occasionLabel = specialOccasion !== 'NINGUNA' ? `[Ocasión: ${specialOccasion}] ` : '';
 
       const payload = {
         restaurant: branchId,
+        type: 'En Mesa',
         table: tableId,
-        user: userId,
-        date: `${date}T${time}:00.000Z`,
-        partySize: Number(partySize),
-        status: 'CONFIRMADA',
-        specialRequests: `[Ocasión: ${specialOccasion}] ${notes}`,
+        // Se construye sin forzar UTC ('Z') para que la hora elegida se interprete
+        // en la zona horaria local del usuario, no siempre como UTC.
+        date: new Date(`${date}T${time}:00`).toISOString(),
+        guestsCount: Number(partySize) || 1,
+        notes: `${occasionLabel}${notes}`.trim(),
       };
 
-      await createReservationRequest(payload).catch(() => ({ data: { success: true } }));
-      toast.success('¡Reservación confirmada exitosamente! Te esperamos en el restaurante.', {
+      await createReservationRequest(payload);
+      toast.success('¡Reservación enviada! Queda pendiente de confirmación del restaurante.', {
         icon: '🥂',
         duration: 5000,
         style: {
